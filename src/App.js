@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+
+  const [simpsonData, setSimpsonData] = React.useState({
+    character: "", image: "", quote: ""
+  })
+  const getSimpsonQuote = () => {
+    // Send the request
+    axios
+      .get('https://simpsons-quotes-api.herokuapp.com/quotes')
+      // Extract the DATA from the received response
+      .then((response) => response.data)
+      // Use this data to update the state
+      .then((data) => {
+        console.log(data);
+        setSimpsonData(data[0]);
+      });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Simpsons quotes</h1>
+      <button onClick={getSimpsonQuote} >generate</button>
+      <h3>{simpsonData.character}</h3>
+      <img src={simpsonData.image} />
+      <p>{simpsonData.quote}</p>
     </div>
   );
 }
